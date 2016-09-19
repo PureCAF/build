@@ -1907,8 +1907,13 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
+CAF_TARGET_PACKAGE := $(PRODUCT_OUT)/PureCAF-1.0-$(shell date -u +%Y%m%d)-$(TARGET_PRODUCT)-$(TARGET_BUILD_TYPE).zip
+
 .PHONY: otapackage
-otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
+otapackage: $(hide) $(INTERNAL_OTA_PACKAGE_TARGET)
+	        $(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CAF_TARGET_PACKAGE)
+	        $(hide) $(MD5SUM) $(CAF_TARGET_PACKAGE) > $(CAF_TARGET_PACKAGE).md5sum
+	        @echo "Collect Your Bacon Here: $(CAF_TARGET_PACKAGE)"
 
 endif    # build_ota_package
 
